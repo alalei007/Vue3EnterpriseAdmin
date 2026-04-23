@@ -33,7 +33,7 @@ request.interceptors.response.use(
     return res
   },
   async (error: AxiosError) => {
-    const originalConfig: InternalAxiosRequestConfig = error.config
+    const originalConfig = { ...error.config, _retry: false }
     const response = error.response
 
     if (response?.status === 401 && !originalConfig._retry) {
