@@ -23,7 +23,7 @@ request.interceptors.request.use(
 )
 
 // 刷新token锁，避免重复刷新token
-let isResfreshToken = false
+let isRefreshToken = false
 // token刷新期间，需要重试的请求
 let retryRequests: Array<Function> = []
 const router = useRouter()
@@ -39,8 +39,8 @@ request.interceptors.response.use(
     if (response?.status === 401 && !originalConfig._retry) {
       // 标记当前请求已重试，避免无限循环
       originalConfig._retry = true
-      if (!isResfreshToken) {
-        isResfreshToken = true
+      if (!isRefreshToken) {
+        isRefreshToken = true
         try {
           // 1. 获取 refreshToken
           if (!getRefreshToken()) {
@@ -50,7 +50,7 @@ request.interceptors.response.use(
           await refreshToken()
 
           const token = getToken()
-          originalConfig.headers.Authorization = `Bear ${token}`
+          originalConfig.headers.Authorization = `Bearer ${token}`
           retryRequests.forEach((cb) => {
             cb(token)
           })
@@ -62,12 +62,12 @@ request.interceptors.response.use(
           router.push('/login')
           return Promise.reject(err)
         } finally {
-          isResfreshToken = false
+          isRefreshToken = false
         }
       } else {
         return new Promise((resolve) => {
           retryRequests.push((token: string) => {
-            originalConfig.headers.Authorization = `Bear ${token}`
+            originalConfig.headers.Authorization = `Bearer ${token}`
             resolve(originalConfig)
           })
         })
@@ -75,21 +75,29 @@ request.interceptors.response.use(
     }
 
     let errorMsg = ''
-    if (error.response) {
-      switch (error.response.status) {
+    const url = response?.config?.url || ''
+    if (error.code === 'ECONNABORTED') {
+      errorMsg = `请求超时：${url}，请稍后重试`
+    } else if (error.response) {
+      const status = error.response.status
+      const serverMsg = error.response.data?.message || error.response.statusText
+      switch (status) {
         case 404:
-          errorMsg = '接口不存在，请检查接口地址'
+          errorMsg = `接口未找到：${url}（${status}）`
           break
         case 500:
-          errorMsg = '服务器内部错误，请稍后重试'
+          errorMsg = `服务器错误（${status}），请稍后重试`
+          break
+        case 403:
+          errorMsg = `没有访问权限：${url}（${status}）`
           break
         default:
-          errorMsg = error.response.data?.message || '请求失败'
+          errorMsg = serverMsg ? `${serverMsg}（${status}）` : `请求失败（${status}）`
       }
     } else {
-      errorMsg = '网络异常，请检查网络连接'
+      errorMsg = error.message || '网络错误，请检查网络连接'
     }
-    ElMessage.error(errorMsg)
+    ElMessage.error(errorMsg, { duration: 3000 })
     return Promise.reject(error)
   },
 )

@@ -1,6 +1,5 @@
 <template>
   <filter-bar :fields="fields" @change="queryChange"></filter-bar>
-  <!-- 表格区域 -->
   <div class="mt-3">
     <base-table v-bind="tableProps"></base-table>
   </div>
@@ -52,7 +51,7 @@ const fields = [
   { label: '创建时间', id: 'createTime', type: 'date' },
 ]
 
-const queryChange = (data: FilterBarQueryData) => {
+const queryChange = (data: FilterBarQueryData[]) => {
   console.log(data)
 }
 </script>

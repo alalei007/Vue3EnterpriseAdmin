@@ -1,5 +1,5 @@
 import PerfectScrollbar from 'perfect-scrollbar'
-import { onBeforeMount, onUpdated, type DirectiveBinding } from 'vue'
+// import { type DirectiveBinding } from 'vue'
 
 interface HTMLElementWithPs extends HTMLElement {
   _ps_?: PerfectScrollbar
@@ -34,18 +34,18 @@ export const scrollBar = {
     el_scrollBar(el)
   },
 
-  updated(el: HTMLElement, binding: DirectiveBinding, vnode: import('vue').VNode) {
-    // try {
-    //   //vnode.context其实就是vue实例，这里其实无需实例也直接用Vue的静态方法
-    //   //故而也可以写成Vue.nextTick
-    //   vnode.context.$nextTick(() => {
-    //     el_scrollBar(el)
-    //   })
-    // } catch (error) {
-    //   console.error(error)
-    //   el_scrollBar(el)
-    // }
-  },
+  // updated(el: HTMLElement, binding: DirectiveBinding, vnode: import('vue').VNode) {
+  // try {
+  //   //vnode.context其实就是vue实例，这里其实无需实例也直接用Vue的静态方法
+  //   //故而也可以写成Vue.nextTick
+  //   vnode.context.$nextTick(() => {
+  //     el_scrollBar(el)
+  //   })
+  // } catch (error) {
+  //   console.error(error)
+  //   el_scrollBar(el)
+  // }
+  // },
 }
 
 export default scrollBar

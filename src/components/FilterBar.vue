@@ -195,20 +195,29 @@ const addTag = (tag: string) => {
   emit('change', queryDataArr)
 }
 
-const tagRefs = ref<Array<TagInstance | null>>(Array(tagList.value.length).fill(null))
+const tagRefs = ref<Array<HTMLElement | null>>(Array(tagList.value.length).fill(null))
 const getTagRef = (index: number) => {
-  return (el: TagInstance) => {
+  return (el: HTMLElement) => {
     tagRefs.value[index] = el
   }
 }
 
-const tagClick = (tag: string, i: number) => {
-  // const eleRef = getTagRef(i)
-  // const { scrollX, scrollY } = window
-  // triggerPosition.value = DOMRect.fromRect({
-  //   x: eleRef.getBoundingClientRect().left + scrollX,
-  //   y: eleRef.getBoundingClientRect().top + scrollY + 20,
-  // })
+const tagClick = (s: string, i: number) => {
+  const eleRef = tagRefs.value[i]
+  if (eleRef) {
+    const { scrollX, scrollY } = window
+    triggerPosition.value = DOMRect.fromRect({
+      x: eleRef?.getBoundingClientRect().left + scrollX,
+      y: eleRef?.getBoundingClientRect().top + scrollY + 20,
+    })
+  }
+  const firstItem = props.fields.find((item) => {
+    const [l, t] = s.split(':')
+    return l && t && item.label === l
+  })
+  firstList.value = []
+  seconList.value = cloneDeep(firstItem?.options)
+  dropdownRef.value?.handleOpen()
 }
 async function simulateInput() {
   if (!inputTagRef.value) return

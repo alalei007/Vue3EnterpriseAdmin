@@ -1,6 +1,5 @@
 import { useUserStore } from '@/stores/user'
 import { getToken } from '@/utils/storage'
-import { el } from 'element-plus/es/locale/index.mjs'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -42,7 +41,7 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to) => {
   const userStore = useUserStore()
   const token = getToken()
   if (to.name !== 'Login' && !token) {

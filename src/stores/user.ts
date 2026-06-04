@@ -40,6 +40,7 @@ export const useUserStore = defineStore('user', () => {
         roles.value = data.roles
         menus.value = data.menus
       } catch (error) {
+        console.error(error)
         clearUserInfo()
         removeToken()
       }

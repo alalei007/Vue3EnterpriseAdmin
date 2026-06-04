@@ -206,9 +206,9 @@ let timer: number | null = null
 
 function updateMenuCollapse() {
   if (menuRowRef.value) {
-    timer && clearTimeout(timer)
+    if (timer) clearTimeout(timer)
     timer = setTimeout(() => {
-      isCollapseMenu.value = menuRowRef.value.offsetWidth < 1200
+      isCollapseMenu.value = menuRowRef.value!.offsetWidth < 1200
     }, 100)
   }
 }
@@ -220,6 +220,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateMenuCollapse)
-  timer && clearTimeout(timer)
+  if (timer) clearTimeout(timer)
 })
 </script>
