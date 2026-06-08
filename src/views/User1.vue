@@ -64,11 +64,11 @@ import TableSearch from '@/components/TableSearch.vue'
 import baseTable from '@/components/baseTable.vue'
 import baseDialog from '@/components/baseDialog.vue'
 import { type TableActionItem, type TableRowData } from '@/types/tableAction'
-import { SearchInputType, type ChangeValueItem, type SelectOptionItem } from '@/types/tableSearch'
+import { SearchInputType, type SelectOptionItem } from '@/types/tableSearch'
 import type { UserItem } from '@/types/userManage'
 import { defineComponent, onBeforeMount, onMounted, reactive, ref } from 'vue'
 defineComponent({
-  name: 'AppUser',
+  name: 'AppUser1',
 })
 const searchOptions = ref<SelectOptionItem[]>([
   {
@@ -171,7 +171,7 @@ function getRowAction(row: TableRowData): TableActionItem[] {
   ]
 }
 
-function search(data: ChangeValueItem) {}
+function search() {}
 
 function handleClick(type: string) {
   console.log(type, 'tttt')
@@ -221,7 +221,7 @@ async function hancleDialogClick(type: string) {
     dialogConfig.isOpen = false
   }
 }
-function handleRowClick(type: string, row: UserItem[]) {
+function handleRowClick(type: string, row: UserItem) {
   const titleMap = {
     delete: '删除',
     enable: '使能',

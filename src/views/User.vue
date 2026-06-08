@@ -28,7 +28,7 @@
       #default
     >
       <div class="text-center py-4">
-        {{ dialogTips[dialog.type] }}{{ dialog.rowData?.username }} 吗？
+        {{ dialogTips[dialog.type as keyof typeof dialogTips] }}{{ dialog.rowData?.username }} 吗？
       </div>
     </template>
 
@@ -66,17 +66,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, defineComponent } from 'vue'
 import { ElMessage } from 'element-plus'
 import { deleteUser, getUserList } from '@/api/userManage'
 import TableAction from '@/components/TableAction.vue'
 import TableSearch from '@/components/TableSearch.vue'
-import BaseTable from '@/components/baseTable.vue'
+import BaseTable, { type TableRow } from '@/components/baseTable.vue'
 import BaseDialog from '@/components/baseDialog.vue'
 import type { TableActionItem, TableRowData } from '@/types/tableAction'
 import { SearchInputType, type ChangeValueItem, type SelectOptionItem } from '@/types/tableSearch'
 import type { UserItem } from '@/types/userManage'
-
+defineComponent({
+  name: 'AppUser',
+})
 // ==========================================
 // 常量配置
 // ==========================================
@@ -247,7 +249,7 @@ function handleSearch(data: ChangeValueItem) {
   // 后续可对接分页/筛选
 }
 
-function handleSelection(datas: TableRowData[]) {
+function handleSelection(datas: TableRow[]) {
   const arr = datas.map((item) => {
     return { ...item }
   })
