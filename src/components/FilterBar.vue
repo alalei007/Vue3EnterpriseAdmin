@@ -8,7 +8,7 @@
     @add-tag="addTag"
   >
     <template #tag="{ value, index }">
-      <div class="flex items-center" :ref="getTagRef(index)" @click="tagClick(value, index)">
+      <div class="flex items-center" @click="tagClick(value, index, $event)">
         <span>{{ value }}</span>
       </div>
     </template>
@@ -53,7 +53,7 @@
 </template>
 <script lang="ts" setup>
 import type { FilterField, optionItem, FilterBarQueryData } from '@/types/FilterBar'
-import { type DropdownInstance, type InputTagInstance, type TagInstance } from 'element-plus'
+import { type DropdownInstance, type InputTagInstance } from 'element-plus'
 import { cloneDeep } from 'lodash'
 import { ref } from 'vue'
 
@@ -195,15 +195,8 @@ const addTag = (tag: string) => {
   emit('change', queryDataArr)
 }
 
-const tagRefs = ref<Array<HTMLElement | null>>(Array(tagList.value.length).fill(null))
-const getTagRef = (index: number) => {
-  return (el: HTMLElement) => {
-    tagRefs.value[index] = el
-  }
-}
-
-const tagClick = (s: string, i: number) => {
-  const eleRef = tagRefs.value[i]
+const tagClick = (s: string, i: number, event: MouseEvent) => {
+  const eleRef = event.currentTarget as HTMLElement
   if (eleRef) {
     const { scrollX, scrollY } = window
     triggerPosition.value = DOMRect.fromRect({
@@ -216,7 +209,7 @@ const tagClick = (s: string, i: number) => {
     return l && t && item.label === l
   })
   firstList.value = []
-  seconList.value = cloneDeep(firstItem?.options)
+  seconList.value = firstItem?.options ? cloneDeep(firstItem.options) : []
   dropdownRef.value?.handleOpen()
 }
 async function simulateInput() {

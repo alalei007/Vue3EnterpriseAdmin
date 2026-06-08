@@ -1,11 +1,5 @@
 import request from './request'
-import type {
-  UserDetailRes,
-  UserForm,
-  UserItem,
-  UserListRes,
-  UserQueryParams,
-} from '@/types/userManage'
+import type { UserDetailRes, UserForm, UserListRes, UserQueryParams } from '@/types/userManage'
 
 export function getUserList(): Promise<UserListRes> {
   return request.get('/user/list')

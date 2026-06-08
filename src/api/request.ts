@@ -25,7 +25,7 @@ request.interceptors.request.use(
 // 刷新token锁，避免重复刷新token
 let isRefreshToken = false
 // token刷新期间，需要重试的请求
-let retryRequests: Array<Function> = []
+let retryRequests: Array<(token: string | null) => void> = []
 const router = useRouter()
 request.interceptors.response.use(
   (response) => {
@@ -50,7 +50,9 @@ request.interceptors.response.use(
           await refreshToken()
 
           const token = getToken()
-          originalConfig.headers.Authorization = `Bearer ${token}`
+          if (originalConfig.headers) {
+            originalConfig.headers.Authorization = `Bearer ${token}`
+          }
           retryRequests.forEach((cb) => {
             cb(token)
           })
@@ -66,8 +68,10 @@ request.interceptors.response.use(
         }
       } else {
         return new Promise((resolve) => {
-          retryRequests.push((token: string) => {
-            originalConfig.headers.Authorization = `Bearer ${token}`
+          retryRequests.push((token: string | null) => {
+            if (originalConfig.headers) {
+              originalConfig.headers.Authorization = token ? `Bearer ${token}` : ''
+            }
             resolve(originalConfig)
           })
         })
@@ -80,7 +84,8 @@ request.interceptors.response.use(
       errorMsg = `请求超时：${url}，请稍后重试`
     } else if (error.response) {
       const status = error.response.status
-      const serverMsg = error.response.data?.message || error.response.statusText
+      const serverMsg =
+        (error.response.data as { message?: string })?.message || error.response.statusText
       switch (status) {
         case 404:
           errorMsg = `接口未找到：${url}（${status}）`
@@ -97,7 +102,7 @@ request.interceptors.response.use(
     } else {
       errorMsg = error.message || '网络错误，请检查网络连接'
     }
-    ElMessage.error(errorMsg, { duration: 3000 })
+    ElMessage.error({ message: errorMsg, duration: 3000 })
     return Promise.reject(error)
   },
 )

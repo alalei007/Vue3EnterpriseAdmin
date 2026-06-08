@@ -287,32 +287,35 @@ export default [
       return {
         code: 200,
         message: '登录成功',
-        data: [
-          {
-            id: 1,
-            roleName: '超级管理员',
-            roleCode: 'admin',
-            remark: '系统最高权限',
-            status: '正常',
-            createTime: '2026-01-01 10:00:00',
-          },
-          {
-            id: 2,
-            roleName: '运营人员',
-            roleCode: 'operate',
-            remark: '负责商品、订单、数据查看',
-            status: '正常',
-            createTime: '2026-01-02 11:12:13',
-          },
-          {
-            id: 3,
-            roleName: '普通用户',
-            roleCode: 'common',
-            remark: '只能查看自身数据',
-            status: '禁用',
-            createTime: '2026-01-03 09:08:07',
-          },
-        ],
+        data: {
+          list: [
+            {
+              id: 1,
+              roleName: '超级管理员',
+              roleCode: 'admin',
+              description: '系统最高权限',
+              status: '正常',
+              createTime: '2026-01-01 10:00:00',
+            },
+            {
+              id: 2,
+              roleName: '运营人员',
+              roleCode: 'operate',
+              description: '负责商品、订单、数据查看',
+              status: '正常',
+              createTime: '2026-01-02 11:12:13',
+            },
+            {
+              id: 3,
+              roleName: '普通用户',
+              roleCode: 'common',
+              description: '只能查看自身数据',
+              status: '禁用',
+              createTime: '2026-01-03 09:08:07',
+            },
+          ],
+          total: 3,
+        },
       }
     },
   },

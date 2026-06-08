@@ -32,7 +32,7 @@
       </el-col>
     </el-row>
 
-    <el-row tag="section" class="flex-1 min-h-0 overflow-hidden">
+    <el-row tag="section" class="flex-1 min-h-0 flex">
       <el-col
         tag="aside"
         :xl="4"
@@ -72,8 +72,8 @@
         </div>
       </el-col>
 
-      <el-col tag="main" :xl="20" :lg="20" :md="22" :sm="21" :xs="20" class="overflow-auto">
-        <div class="min-h-full p-4 ml-4">
+      <el-col tag="main" :xl="20" :lg="20" :md="22" :sm="21" :xs="20" class="h-full overflow-auto">
+        <div class="p-4 ml-4">
           <router-view />
         </div>
       </el-col>

@@ -1,5 +1,5 @@
 <!-- 基础表格组件
- props: 
+ props:
     columns: 表格列配置
     data: 表格数据
     total: 数据总条数
@@ -78,9 +78,6 @@
 </template>
 
 <style scoped>
-.base-table-wrapper {
-  /* position: relative; */
-}
 .table-pagination {
   margin-top: 16px;
   text-align: right;
@@ -111,7 +108,7 @@ type TableColumn = {
   align?: 'left' | 'center' | 'right'
 }
 
-type TableRow = Record<string, unknown>
+export type TableRow = Record<string, unknown>
 
 const props = defineProps({
   columns: {
@@ -173,15 +170,15 @@ let containerWidth = 0
 let contentWidth = 0
 onMounted(() => {
   if (tableRef.value && slotRef.value) {
-    containerWidth = tableRef.value.offsetWidth
-    contentWidth = slotRef.value.offsetWidth
+    containerWidth = (tableRef.value as HTMLElement).offsetWidth
+    contentWidth = (slotRef.value as HTMLElement).offsetWidth
     console.log('ff')
   }
 })
-watch(slotRef, (newWidth) => {
-  contentWidth = newWidth.offsetWidth
+watch(slotRef, (newWidth: HTMLElement | null) => {
+  contentWidth = newWidth ? newWidth.offsetWidth : 0
   if (tableRef.value) {
-    containerWidth = tableRef.value.offsetWidth
+    containerWidth = (tableRef.value as HTMLElement).offsetWidth
     console.log('a')
     if (contentWidth > containerWidth) {
       console.log('插槽内容宽度超出容器宽度')
